@@ -1,0 +1,41 @@
+{
+  "name": "priority-redlock",
+  "version": "0.1.0",
+  "description": "Share resources with a modified Redlock that adds prioritized locking (and lock-out)",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "engineStrict": false,
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "dependencies": {
+    "@types/uuid": "^3.4.4",
+    "tslib": "~1.9.0",
+    "typescript": "^3.4.1",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/node": "~8.10.10",
+    "jest": "^24.7.1",
+    "rimraf": "~2.6.2",
+    "ts-jest": "~22.4.4",
+    "tslint": "^5.9.1",
+    "tslint-microsoft-contrib": "~5.0.3",
+    "tsutils": "~2.26.2"
+  },
+  "scripts": {
+    "clean": "rimraf coverage lib tmp",
+    "build": "npm run clean && npm run build:ts-js && npm run build:ts-types",
+    "build:ts-js": "tsc -p tsconfig.json",
+    "build:ts-types": "tsc -p tsconfig.release.json",
+    "deploy-dry": "npm run build & npm run lint & npm run test && git status",
+    "watch": "tsc -w -p tsconfig.release.json",
+    "lint": "tslint -t stylish --project \"tsconfig.json\"",
+    "test": "tslint --fix --project \"tsconfig.json\" && npm run lint && npm run test-only",
+    "test-only": "jest --coverage --runInBand",
+    "test:watch": "jest --watch"
+  },
+  "author": "Eric <git@letsmakeit.com>",
+  "license": "APLv2"
+}
