@@ -1,17 +1,17 @@
-### About priority-redlock
+## About priority-redlock
 
 Provides an easy way to coordinate independent components that need access to a shared resource.  It extends the [Redlock](https://redis.io/topics/distlock) algorithm, with the concept of priority added on. Priority at it's core allows lock holders to coordinate with each other without explict knowledge of each other.  To automatically wrap some of the complexity of managing locks into a convenient Generator-based API, check out [gen-lock](https://github.com/gittyeric/gen-lock), which is probably what you really need.
 
 This repository comes with an in-memory LockingProtocol implementation, useful for coordinating multiple scripts running within the same JS runtime.  Stay tuned for the distributed LockingProtocol implementation in Redis.  If you need a distributed lock _right now without_ priorities, there's lots of good vanilla Redlock implementations on npm.
 
-### Features
+## Features
 
 - Low-level async aquire / release interface
 - Priority-based locking
 - Re-entrant per lock holder
 - Combine multiple locks in fun ways to deadlock yourself
 
-### Installation
+## Installation
 
 ```
 npm install priority-redlock
@@ -45,7 +45,7 @@ aquire('resourceToLock', 'locker2')
     })
 ```
 
-### Example 2: Decentralized + Prioritized process coordination
+#### Example 2: Decentralized + Prioritized process coordination
 
 Say you need to have many processes greedily attempt command a shared resource as often as possible, while letting
 certain processes take precedence over others.  In this case let's define a 'save energy' task and an 'motion detected' task that can both control
@@ -75,7 +75,7 @@ aquire(LIGHTS, 'motion detected', { priority: 100 })
     });
 ```
 
-### Example 3: Aquire multiple locks
+#### Example 3: Aquire multiple locks
 
 Perhaps you have 2 processes that independently manage a KITCHEN_LIGHT and a BEDROOM_LIGHT, but
 want to give a 3rd security process absolute authority over both KITCHEN_LIGHT and BEDROOM_LIGHT,
@@ -104,7 +104,7 @@ aquireAll([
     })
 
 
-### API
+## API
 
 #### Default Import
 
