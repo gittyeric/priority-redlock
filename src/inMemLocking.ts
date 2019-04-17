@@ -171,9 +171,7 @@ export const newInMemoryLockingProtocol: (beforeVictimNotify?: (aquisitionId: st
                     aquisitionId, resourceGuid, timeout)
             }
             // Otherwise probably an upstream bug
-            else {
-                throw new Error(`Cannot listen for theif, ${aquisitionId} does not own ${resourceGuid}`)
-            }
+            return Promise.reject(new Error(`Cannot listen for theif, ${aquisitionId} does not own ${resourceGuid}`))
         }
 
         const listenForUnlock: ReleaseListener = (listener: (reason: ReleaseReason) => void, aquisitionId: string, resourceGuid: string, timeout: number) => {
@@ -185,9 +183,7 @@ export const newInMemoryLockingProtocol: (beforeVictimNotify?: (aquisitionId: st
                 applyListenerTtl({}, aquisitionId, off, timeout)
             }
             // Otherwise probably an upstream bug
-            else {
-                throw new Error(`Cannot listen for unlock, ${aquisitionId} does not own ${resourceGuid}`)
-            }
+            return Promise.reject(new Error(`Cannot listen for unlock, ${aquisitionId} does not own ${resourceGuid}`))
         }
 
         const notifyVictim = (victimAquisitionId: string, aquisitionId: string, resourceGuid: string, timeout: number) => {

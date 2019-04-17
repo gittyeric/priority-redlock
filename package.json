@@ -35,7 +35,7 @@
     "watch": "tsc -w -p tsconfig.release.json",
     "lint": "tslint -t stylish --project \"tsconfig.json\"",
     "test": "tslint --fix --project \"tsconfig.json\" && npm run lint && npm run test-only",
-    "test-only": "jest --coverage --runInBand",
+    "test-only": "jest --coverage --runInBand --detectOpenHandles",
     "test:watch": "jest --watch"
   },
   "author": "Eric <git@letsmakeit.com>",

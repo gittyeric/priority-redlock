@@ -60,14 +60,14 @@ export const aquireAll = (aquirers: (() => Promise<Lock>)[], totalAquireTtl: num
             aquiredLocks.push(ready)
             if (isAquireExpired(initAquireTime, totalAquireTtl)) {
                 destroy()
-                throw newLockError(LOCK_AQUIRE_TIMEOUT)
+                return Promise.reject(newLockError(LOCK_AQUIRE_TIMEOUT))
             }
             // Look for losing previous locks
             const lostLocks = aquiredLocks.filter((lock) =>
                 !isLockHeld(lock.state()))
             if (lostLocks.length > 0) {
                 destroy()
-                throw newLockError(lostLocks[0].state() as LockErrorType)
+                return Promise.reject(newLockError(lostLocks[0].state() as LockErrorType))
             }
 
             listenForDestruction(ready)
@@ -83,7 +83,7 @@ export const aquireAll = (aquirers: (() => Promise<Lock>)[], totalAquireTtl: num
             return tailLock
         })
             .catch((e) => {
-                throw e
+                return Promise.reject(e)
             })
     }
 

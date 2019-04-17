@@ -1,5 +1,6 @@
-import { InMemoryLockingProtocol, newInMemoryLockingProtocol } from '../src/inMemLocking';
+import { newInMemoryLockingProtocol } from '../src/inMemLocking';
 import { promiseLastingFor as delay, promiseLastingFor } from '../src/util';
+import { LockingProtocol } from '../src/lockingProtocol';
 
 // Provides an in-memory instance of a LockingProtocol that acts like a distributed implementation
 export interface NetworkSimulationOptions {
@@ -14,7 +15,7 @@ interface NetworkSimulation {
     releaseDelay: number,
 }
 
-export interface NetworkSimulatedLockingProtocol extends InMemoryLockingProtocol {
+export interface NetworkSimulatedLockingProtocol extends LockingProtocol {
     simulate(options: NetworkSimulationOptions): void
 }
 
@@ -33,7 +34,7 @@ export const newSimulatedProtocol = () => {
         obtain: (...args) =>
             delay(simulation.obtainDelay).
                 then(() => locking.obtain(...args))
-                .catch((e) => { throw e }),
+                .catch((e) => Promise.reject(e)),
         release: (...args) =>
             delay(simulation.releaseDelay).
                 then(() => locking.release(...args))

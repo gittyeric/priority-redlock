@@ -16,12 +16,12 @@ const aquireFromVictim: (protocol: LockingProtocol) =>
 
         const remainingAquireTtl = remainingAquireTime(initAquireTime, options.aquireTimeout)
         return protocol.notifyVictim(obtainResult.exAquisitionId, obtainResult.aquisitionId, resourceGuid, remainingAquireTtl)
-            .then(() => {
+            .then((e) => {
                 if (lockIsBeingStolen) {
-                    throw newLockError(LOCK_STOLEN_BY_HIGHER_PRIORITY)
+                    return Promise.reject<Lock>(newLockError(LOCK_STOLEN_BY_HIGHER_PRIORITY))
                 }
                 if (isAquireExpired(initAquireTime, options.aquireTimeout)) {
-                    throw newLockError(LOCK_AQUIRE_TIMEOUT)
+                    return Promise.reject(newLockError(LOCK_AQUIRE_TIMEOUT))
                 }
                 return newLock(protocol)(resourceGuid, obtainResult)
             })
@@ -38,21 +38,21 @@ const aquireLock: (protocol: LockingProtocol) =>
                 .then((result) => {
                     if (isAquireSuccess(result)) {
                         if (isAquireExpired(initAquireTime, options.aquireTimeout)) {
-                            throw newLockError(LOCK_AQUIRE_TIMEOUT)
+                            return Promise.reject(newLockError(LOCK_AQUIRE_TIMEOUT))
                         }
 
                         // If stolen from peer, wait some time for their acknowledgement
                         if (isAquiredFromPeer(result)) {
                             return aquireFromVictim(protocol)(resourceGuid, result, initAquireTime, options)
                                 .catch((e) => {
-                                    throw e
+                                    return Promise.reject(e)
                                 })
                         }
                         return newLock(protocol)(resourceGuid, result)
                     }
                     // Lock is already taken by higher or same priority holder
                     else {
-                        throw newLockError(LOCK_ALREADY_AQUIRED)
+                        return Promise.reject(newLockError(LOCK_ALREADY_AQUIRED))
                     }
                 })
                 // Any number of errors could have occurred
@@ -70,10 +70,9 @@ const aquireLock: (protocol: LockingProtocol) =>
                     if (!aquireWillBeExpired(initAquireTime, nextAquireDelay, options)) {
                         return promiseLastingFor(nextAquireDelay)
                             .then(() => aquireLock(protocol)(resourceGuid, lockerGuid, options, initAquireTime, callCount + 1))
-                            .catch((e) => {
-                                throw e })
+                            .catch((e) => Promise.reject(e))
                     }
-                    throw e
+                    return Promise.reject(e)
                 })
         }
 
