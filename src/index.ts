@@ -2,9 +2,7 @@ import { aquire, Aquire } from './aquire'
 import { mergeWithDefaultOptions } from './util'
 import { LockingProtocol, AquireOptions } from './lockingProtocol'
 import uuid from 'uuid/v4'
-import * as lockingProtocol from './lockingProtocol'
-import * as util from './util';
-import * as eventDispatcher from './eventDispatcher';
+import * as utils from './util'
 
 // ----------- Hopefully all you need -----------------
 export default function aquireFactory(protocol: LockingProtocol = newInMemoryLockingProtocol()): Aquire {
@@ -12,15 +10,23 @@ export default function aquireFactory(protocol: LockingProtocol = newInMemoryLoc
     return (resouceGuid: string, lockerGuid: string = uuid(), options?: AquireOptions) =>
         boundAquire(resouceGuid, lockerGuid, mergeWithDefaultOptions(options))
 }
+export { aquireAll } from './lockOps'
 
 // ----------- High-level APIs ------------------------
 export { aquire } from './aquire'
 export { Lock, LockState, LockHeldState } from './release'
-export { aquireAll } from './lockOps'
-export const protocol = lockingProtocol
 
-// ----------- Low-level internal helpers -------------
-
-export const events = eventDispatcher
-import { newInMemoryLockingProtocol } from './inMemLocking';
-export const utils = util
+// ----------- Low-level internal stuff -------------
+import { newInMemoryLockingProtocol } from './inMemLocking'
+export { Dispatcher, Handler, Handlers, Off, newDispatcher } from './eventDispatcher'
+export {
+    AquireOptions, DefinedAquireOptions,
+    LOCK_ALREADY_AQUIRED, LOCK_AQUIRE_TIMEOUT, LOCK_RELEASED, LOCK_STOLEN_BY_HIGHER_PRIORITY, LOCK_TIMED_OUT,
+    LOCK_ERROR_NAME, LockError, LockErrorType, LockErrorTypes,
+    LockingProtocol,
+    Obtain, ObtainDenied, ObtainResult, ObtainSuccess, ObtainedByReentrance, ObtainedFromVictim,
+    PRIORITY_MAX, PRIORITY_MEDIUM, PRIORITY_MIN,
+    Release, ReleaseListener, ReleaseReason, TheifListener, VictimNotifier,
+    defaultOptions,
+} from './lockingProtocol'
+export const util = utils

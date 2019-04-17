@@ -53,7 +53,7 @@ export interface DefinedAquireOptions extends AquireOptions {
 }
 
 export const defaultOptions: DefinedAquireOptions = {
-    priority: PRIORITY_MIN,
+    priority: PRIORITY_MEDIUM,
     aquireTimeout: Number.POSITIVE_INFINITY,
     lockTtl: Number.POSITIVE_INFINITY,
     maxAquireAttempts: Number.POSITIVE_INFINITY,
