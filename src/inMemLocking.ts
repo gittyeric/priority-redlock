@@ -96,7 +96,7 @@ export const newInMemoryLockingProtocol: (beforeVictimNotify?: (aquisitionId: st
             if (!existing) {
                 const result: ObtainSuccess = {
                     aquisitionId: proposedAquisitionId,
-                    obtainTimestamp: (new Date()).getTime(),
+                    obtainTimestamp: getNow(),
                     lockTtl: options.lockTtl,
                 }
                 resourceLockMap[resourceGuid] = lockValue
@@ -126,8 +126,8 @@ export const newInMemoryLockingProtocol: (beforeVictimNotify?: (aquisitionId: st
                     aquisitionId: proposedAquisitionId,
                     exAquisitionId: existing.aquisitionId,
                     exLockerGuid: existing.lockerId,
-                    lockTtl: existing.lockTtl,
-                    obtainTimestamp: existing.lockAquireTimestamp,
+                    lockTtl: options.lockTtl,
+                    obtainTimestamp: getNow(),
                 }
 
                 return deleteResourceLock(existing.aquisitionId, resourceGuid)
@@ -171,9 +171,7 @@ export const newInMemoryLockingProtocol: (beforeVictimNotify?: (aquisitionId: st
                     aquisitionId, resourceGuid, timeout)
             }
             // Otherwise probably an upstream bug
-            else {
-                throw new Error(`Cannot listen for theif, ${aquisitionId} does not own ${resourceGuid}`)
-            }
+            throw new Error(`Cannot listen for theif, ${aquisitionId} does not own ${resourceGuid}`)
         }
 
         const listenForUnlock: ReleaseListener = (listener: (reason: ReleaseReason) => void, aquisitionId: string, resourceGuid: string, timeout: number) => {

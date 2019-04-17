@@ -64,7 +64,7 @@ export const isAquireExpired = (initAquireTime: number, aquireTimeout: number) =
     (remainingAquireTime(initAquireTime, aquireTimeout) <= 0)
 
 export const randomBytes = (byteCount: number) =>
-    pseudoRandomBytes(byteCount).toString()
+    pseudoRandomBytes(byteCount).toString('hex')
 
 export const newLockError: <T extends LockErrorType>(errType: T) => LockError<T> = (errType) => ({
     name: LOCK_ERROR_NAME,

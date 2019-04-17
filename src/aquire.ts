@@ -45,7 +45,7 @@ const aquireLock: (protocol: LockingProtocol) =>
                         if (isAquiredFromPeer(result)) {
                             return aquireFromVictim(protocol)(resourceGuid, result, initAquireTime, options)
                                 .catch((e) => {
-                                    throw e
+                                    return Promise.reject(e)
                                 })
                         }
                         return newLock(protocol)(resourceGuid, result)
