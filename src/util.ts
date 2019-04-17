@@ -1,3 +1,4 @@
+import { pseudoRandomBytes } from 'crypto';
 import { AquireOptions, defaultOptions, DefinedAquireOptions, LockError, LockErrorType, LOCK_ERROR_NAME, ObtainedFromVictim, ObtainResult, ObtainSuccess } from './lockingProtocol';
 import { LockHeldState, LockState } from './release';
 
@@ -61,6 +62,9 @@ export const aquireWillBeExpired = (initAquireTime: number, delay: number, optio
 
 export const isAquireExpired = (initAquireTime: number, aquireTimeout: number) =>
     (remainingAquireTime(initAquireTime, aquireTimeout) <= 0)
+
+export const randomBytes = (byteCount: number) =>
+    pseudoRandomBytes(byteCount).toString()
 
 export const newLockError: <T extends LockErrorType>(errType: T) => LockError<T> = (errType) => ({
     name: LOCK_ERROR_NAME,

@@ -1,7 +1,6 @@
-import uuid from 'uuid/v4';
 import { DefinedAquireOptions, LockingProtocol, LOCK_ALREADY_AQUIRED, LOCK_AQUIRE_TIMEOUT, LOCK_STOLEN_BY_HIGHER_PRIORITY, ObtainedFromVictim } from './lockingProtocol';
 import { Lock, newLock } from './release';
-import { aquireWillBeExpired, exponentialBackoff, getNow, isAquiredFromPeer, isAquireExpired, isAquireSuccess, newLockError, promiseLastingFor, remainingAquireTime, remainingLockTime } from './util';
+import { aquireWillBeExpired, exponentialBackoff, getNow, isAquiredFromPeer, isAquireExpired, isAquireSuccess, newLockError, promiseLastingFor, randomBytes, remainingAquireTime, remainingLockTime } from './util';
 
 // Specifies internal, low-level interface details required for a resourceLock implementation,
 // as well as an implemenetation of the aquire protocol layer that sits above LockingProtocol
@@ -34,7 +33,7 @@ const aquireLock: (protocol: LockingProtocol) =>
     (protocol) =>
         (resourceGuid, lockerGuid, options, initAquireTime, callCount) => {
             const curAquireTimeout = remainingAquireTime(initAquireTime, options.aquireTimeout)
-            const proposedAquisitionId = uuid()
+            const proposedAquisitionId = randomBytes(16)
             return protocol.obtain(resourceGuid, lockerGuid, proposedAquisitionId, options, curAquireTimeout)
                 .then((result) => {
                     if (isAquireSuccess(result)) {

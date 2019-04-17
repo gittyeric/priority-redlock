@@ -1,14 +1,13 @@
 import { aquire, Aquire } from './aquire'
 import { mergeWithDefaultOptions } from './util'
 import { LockingProtocol, AquireOptions } from './lockingProtocol'
-import uuid from 'uuid/v4'
 import * as utils from './util'
 import { newInMemoryLockingProtocol } from './inMemLocking'
 
 // ----------- Hopefully all you need -----------------
 export default function aquireFactory(protocol: LockingProtocol = newInMemoryLockingProtocol()): Aquire {
     const boundAquire = aquire(protocol)
-    return (resouceGuid: string, lockerGuid: string = uuid(), options?: AquireOptions) =>
+    return (resouceGuid: string, lockerGuid: string = utils.randomBytes(16), options?: AquireOptions) =>
         boundAquire(resouceGuid, lockerGuid, mergeWithDefaultOptions(options))
 }
 export { aquireAll } from './lockOps'

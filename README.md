@@ -10,6 +10,7 @@ This repository comes with an in-memory LockingProtocol implementation, useful f
 - Priority-based locking
 - Re-entrant per lock holder
 - Combine multiple locks in fun ways to deadlock yourself
+- Zero dependencies!
 
 ## Installation
 
