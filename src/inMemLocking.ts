@@ -1,11 +1,6 @@
 import { newDispatcher } from './eventDispatcher';
-import { DefinedAquireOptions, LockError, LockingProtocol, LOCK_ALREADY_AQUIRED, LOCK_RELEASED, LOCK_STOLEN_BY_HIGHER_PRIORITY, Obtain, ObtainedByReentrance, ObtainedFromVictim, ObtainSuccess, Release, ReleaseListener, ReleaseReason, TheifListener, LOCK_TIMED_OUT } from './lockingProtocol';
+import { DefinedAquireOptions, LOCK_ALREADY_AQUIRED, LOCK_RELEASED, LOCK_STOLEN_BY_HIGHER_PRIORITY, LOCK_TIMED_OUT, Obtain, ObtainedByReentrance, ObtainedFromVictim, ObtainSuccess, Release, ReleaseListener, ReleaseReason, TheifListener, LockingProtocol } from './lockingProtocol';
 import { getNow, newLockError } from './util';
-
-
-export type NotifyUnlock = (aquisitionId: string, unlockReason: LockError<any>) => Promise<void>
-export interface InMemoryLockingProtocol extends LockingProtocol {
-}
 
 interface LockValue {
     aquisitionId: string,
@@ -45,7 +40,7 @@ const removeOff = (aquisitionId: string, listeners: AquisitionToOffs, off: () =>
     }
 }
 
-export const newInMemoryLockingProtocol: (beforeVictimNotify?: (aquisitionId: string) => Promise<void>) => InMemoryLockingProtocol =
+export const newInMemoryLockingProtocol: (beforeVictimNotify?: (aquisitionId: string) => Promise<void>) => LockingProtocol =
     (beforeVictimNotify) => {
         const resourceLockMap: ResourceToLocker = {}
         const aquisitionThiefAcks: LockerToPendingAcks = {}

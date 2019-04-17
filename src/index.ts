@@ -3,6 +3,7 @@ import { mergeWithDefaultOptions } from './util'
 import { LockingProtocol, AquireOptions } from './lockingProtocol'
 import uuid from 'uuid/v4'
 import * as utils from './util'
+import { newInMemoryLockingProtocol } from './inMemLocking'
 
 // ----------- Hopefully all you need -----------------
 export default function aquireFactory(protocol: LockingProtocol = newInMemoryLockingProtocol()): Aquire {
@@ -17,7 +18,7 @@ export { aquire } from './aquire'
 export { Lock, LockState, LockHeldState } from './release'
 
 // ----------- Low-level internal stuff -------------
-import { newInMemoryLockingProtocol } from './inMemLocking'
+export { newInMemoryLockingProtocol } from './inMemLocking'
 export { Dispatcher, Handler, Handlers, Off, newDispatcher } from './eventDispatcher'
 export {
     AquireOptions, DefinedAquireOptions,
