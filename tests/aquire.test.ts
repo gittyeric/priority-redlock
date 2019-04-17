@@ -6,6 +6,10 @@ import { getNow, isLockError, promiseLastingFor } from '../src/util';
 import { newSimulatedProtocol } from './netSimulatedProtocol';
 
 describe('aquire', () => {
+    process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  // application specific logging, throwing an error, or other logic here
+});
     it('should work with default values', () => {
         const protocol = newInMemoryLockingProtocol()
         return aquire(protocol)('a', 'l', defaultOptions)

@@ -32,8 +32,8 @@ export const newSimulatedProtocol = () => {
     const protocol: NetworkSimulatedLockingProtocol = {
         ...locking,
         obtain: (...args) =>
-            delay(simulation.obtainDelay)
-                .then(() => locking.obtain(...args))
+            delay(simulation.obtainDelay).
+                then(() => locking.obtain(...args))
                 .catch((e) => Promise.reject(e)),
         release: (...args) =>
             delay(simulation.releaseDelay)

@@ -11,7 +11,7 @@ coverage
 
 # VS Code
 .vscode
-!.vscode/tasks.js
+.vscode/
 .editorconfig
 
 # JetBrains IDEs
