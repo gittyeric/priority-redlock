@@ -82,6 +82,7 @@ Perhaps you have 2 processes that independently manage a KITCHEN_LIGHT and a BED
 want to give a 3rd security process absolute authority over both KITCHEN_LIGHT and BEDROOM_LIGHT,
 so that the first 2 processes are locked out as long as security runs.
 
+```
 var aquire = require('priority-redlock')();
 var aquireAll = require('priority-redlock').aquireAll;
 var KITCHEN_LIGHT = 'kitchen light';
@@ -103,7 +104,7 @@ aquireAll([
         await flashSecurityLights()
         compositeLock.release();
     })
-
+```
 
 ## API
 
