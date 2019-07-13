@@ -1,12 +1,12 @@
 {
   "name": "priority-redlock",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Share resources with a modified Redlock that adds prioritized locking (and lock-out)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/gittyeric/priority-redlock"
+    "type": "git",
+    "url": "https://github.com/gittyeric/priority-redlock"
   },
   "engineStrict": false,
   "engines": {
